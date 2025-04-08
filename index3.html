@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            background-color: #ffffff;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: #e0e0e0;
+        }
+        .winner {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: rgb(28, 171, 242);
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="board" id="board"></div>
+    <p class="winner" id="winner"></p>
+    <button onclick="resetGame()">Restart Game</button>
+    <script>
+        let board = Array(9).fill(null);
+        let isXNext = true;
+
+        function checkWinner() {
+            const lines = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            for (let [a, b, c] of lines) {
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            return null;
+        }
+
+        function handleClick(index) {
+            if (board[index] || checkWinner()) return;
+            board[index] = isXNext ? "X" : "O";
+            isXNext = !isXNext;
+            updateBoard();
+        }
+
+        function updateBoard() {
+            const boardDiv = document.getElementById("board");
+            boardDiv.innerHTML = "";
+            board.forEach((cell, index) => {
+                const cellDiv = document.createElement("div");
+                cellDiv.classList.add("cell");
+                cellDiv.textContent = cell;
+                cellDiv.onclick = () => handleClick(index);
+                boardDiv.appendChild(cellDiv);
+            });
+            const winner = checkWinner();
+            document.getElementById("winner").textContent = winner ? Winner: !"";
+        }
+
+        function resetGame() {
+            board = Array(9).fill(null);
+            isXNext = true;
+            updateBoard();
+        }
+
+        updateBoard();
+    </script>
+</body>
+</html>
